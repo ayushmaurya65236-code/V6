@@ -1,2 +1,133 @@
-# V6
+# AURA LINK V6
 
+AURA LINK V6 is a Python-based gesture-control and robotics interface with a visual HUD, webcam hand tracking, an optional local web dashboard, and an ESP32 connection or virtual ESP32 simulator.
+
+> **Project status:** This guide describes the current project structure. Hardware features require compatible ESP32 firmware; simulator mode can be used without connecting a physical ESP32.
+
+## Features
+
+- Webcam-based hand tracking for up to two hands using MediaPipe Tasks.
+- Gesture mapping: **Open Palm → LED ON**, **Fist → LED OFF**, and **Peace → LED BLINK** when extended gestures are enabled.
+- Animated HUD with status information and keyboard controls.
+- Optional eye-openness estimation (not identity recognition or a medical tool).
+- ESP32 discovery/HTTP communication and a virtual ESP32 simulator.
+- Local web dashboard, configured by default for `http://127.0.0.1:8080` when the dashboard server is running.
+
+## Requirements
+
+- Windows, macOS, or Linux with a Python version supported by the installed MediaPipe release.
+- A webcam for live hand tracking.
+- Internet access on first run if the required MediaPipe task model files need to be downloaded.
+- Optional: compatible ESP32 hardware and matching firmware.
+- Optional: audio output and a working audio device for sound effects.
+
+## Install
+
+Open a terminal in the project folder.
+
+1. Create and activate a virtual environment:
+
+   **Windows PowerShell**
+   ```powershell
+   py -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   ```
+
+   **macOS/Linux**
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+
+2. Install the main Python packages:
+
+   ```bash
+   python -m pip install --upgrade pip
+   python -m pip install opencv-python mediapipe numpy
+   ```
+
+   Optional audio effects use `sounddevice`:
+   ```bash
+   python -m pip install sounddevice
+   ```
+
+   If installation fails, check that your Python version and operating system are supported by MediaPipe. The project currently does not include a pinned `requirements.txt`, so package versions may need adjustment for your system.
+
+3. Create your local configuration file from the example:
+
+   **Windows PowerShell**
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+   **macOS/Linux**
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit `.env` only if you need to change settings. Keep real tokens and private information out of GitHub. Do not put Wi-Fi passwords in this file; use the ESP32 setup form provided by the project.
+
+## Run
+
+From the project root, with your virtual environment activated:
+
+```bash
+python main.py
+```
+
+Allow camera access when prompted by your operating system. The application may download its required model files on first run. Those model files are intentionally excluded from the repository and are stored locally.
+
+## Gesture and keyboard controls
+
+| Gesture / key | Action |
+| --- | --- |
+| Open Palm | LED ON |
+| Fist | LED OFF |
+| Peace | LED BLINK when extended gestures are enabled |
+| `h` | Show or hide help |
+| `d` | Toggle demo mode / virtual ESP32 |
+| `e` | Enable or disable extended gestures |
+| `s` | Save a screenshot |
+| `f` | Toggle fullscreen |
+| `m` | Mute or unmute sound |
+| `+` / `-` | Adjust volume |
+| `r` | Reset the system |
+| `q` | Quit |
+
+Some gestures display information on the HUD rather than issuing a hardware command. Actual hardware control requires compatible firmware and a reachable ESP32.
+
+## Configuration
+
+The example `.env.example` documents supported settings, including:
+
+- `AURA_CAMERA_INDEX` — camera index (default `0`).
+- `AURA_DEMO_MODE` — start with demo/simulator mode enabled.
+- `AURA_EYE_TRACKING` — enable optional eye tracking.
+- `AURA_EXTENDED_GESTURES` — enable extended gestures.
+- `AURA_WEB_HOST` and `AURA_WEB_PORT` — dashboard bind address and port.
+- `AURA_ESP32_IP` — optional fixed ESP32 address.
+
+The dashboard binds to localhost by default. Do not expose it to a network unless you understand the security implications and have configured authentication appropriately.
+
+## Troubleshooting
+
+- **Camera not found:** close other apps using the webcam and check `AURA_CAMERA_INDEX`.
+- **MediaPipe/model error:** verify Python compatibility, install the packages above, and ensure the first-run model download can access the internet.
+- **ESP32 offline:** try demo mode first; then check that the ESP32 is on the same network and running firmware compatible with this project.
+- **No sound:** install `sounddevice` and check your operating system's audio device. Audio is optional.
+- **Port already in use:** change `AURA_WEB_PORT` in your local `.env` file.
+
+## Safety and privacy
+
+- Camera frames are used for local vision processing by this application; review the code and configuration before using it in sensitive environments.
+- Use the virtual simulator to test before connecting hardware.
+- This version's allowed hardware commands are limited to LED/display-related actions and emergency stop; do not assume it supports motor or servo control.
+- Never commit `.env`, API tokens, Wi-Fi credentials, or other secrets.
+
+## Contributing
+
+Bug reports and improvements are welcome. Describe your operating system, Python version, steps to reproduce, and relevant error messages. Do not include passwords, API keys, or private camera footage in an issue.
+
+## License
+
+No open-source license has been added yet. Until a license is chosen, public visibility on GitHub does not automatically grant permission to redistribute or publish modified copies of this code.
