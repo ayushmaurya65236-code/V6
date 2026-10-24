@@ -77,6 +77,32 @@ python main.py
 
 Allow camera access when prompted by your operating system. The application may download its required model files on first run. Those model files are intentionally excluded from the repository and are stored locally.
 
+
+## ESP32 hardware firmware (Arduino)
+
+A standalone ESP32 firmware example is included at [`hardware/esp32/aura_link_esp32_core.ino`](hardware/esp32/aura_link_esp32_core.ino). It provides a local web dashboard, LED control routes, a status endpoint, and UDP discovery on port **4210**. This is the AURA LINK v4-style hardware core; it is a starting point and is **not guaranteed to integrate automatically with every V6 software feature**.
+
+### Upload it to an ESP32
+
+1. Install the Arduino IDE and the ESP32 board support package for your board.
+2. Open `hardware/esp32/aura_link_esp32_core.ino` in the Arduino IDE.
+3. In the sketch, replace `YOUR_WIFI_NAME` and `YOUR_WIFI_PASSWORD` with your Wi-Fi credentials **on your own local copy only**. Never commit real credentials to GitHub.
+4. Select the correct ESP32 board and USB/serial port, then upload the sketch.
+5. Open Serial Monitor at **115200 baud**. After it connects to Wi-Fi, note the IP address printed in the output.
+6. Connect your laptop to the same trusted local network and open `http://<ESP32-IP>/` in a browser, replacing `<ESP32-IP>` with the address shown in Serial Monitor.
+
+### Available endpoints
+
+| Endpoint | Purpose |
+| --- | --- |
+| `/` | Open the LED dashboard |
+| `/status` | Read plain-text device status |
+| `/led/on` | Turn the built-in LED on |
+| `/led/off` | Turn the built-in LED off |
+| UDP port `4210` | Respond to `AURA_DISCOVER_V1` discovery messages |
+
+**Network safety:** this example uses plain HTTP and does not implement authentication. Use it only on a trusted local network; do not expose it directly to the public internet. The built-in LED pin can vary by ESP32 board.
+
 ## Gesture and keyboard controls
 
 | Gesture / key | Action |
