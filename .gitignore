@@ -1,0 +1,15 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+models/*.task
+captures/*.png
+captures/*.jpg
+*.log
+.DS_Store
+Thumbs.db
+AURA_LINK_V6.zip

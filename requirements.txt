@@ -1,0 +1,7 @@
+# Core runtime dependencies for AURA LINK V6
+numpy
+opencv-python
+mediapipe
+
+# Optional audio output:
+# sounddevice
