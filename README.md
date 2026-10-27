@@ -15,7 +15,8 @@ AURA LINK V6 is a Python-based gesture-control and robotics interface with a vis
 
 ## Requirements
 
-- Windows, macOS, or Linux with a Python version supported by the installed MediaPipe release.
+- Windows 10/11 is the primary documented setup; other operating systems may work but are not yet verified.
+- Use a Python version supported by the current MediaPipe wheel for your operating system. Python 3.11 or 3.12 is a sensible starting point if you encounter install errors; confirm support before choosing a version.
 - A webcam for live hand tracking.
 - Internet access on first run if the required MediaPipe task model files need to be downloaded.
 - Optional: compatible ESP32 hardware and matching firmware.
@@ -23,7 +24,19 @@ AURA LINK V6 is a Python-based gesture-control and robotics interface with a vis
 
 ## Install
 
-Open a terminal in the project folder.
+Open a terminal in the project folder. If you are using Windows, install Git and Python first, then clone the repository and enter its folder:
+
+```powershell
+git clone https://github.com/ayushmaurya65236-code/V6.git
+cd V6
+```
+
+If the full V6 files are still on the `aura-link-v6-upload` branch rather than `main`, use the branch-specific clone command until the pull request is merged:
+
+```powershell
+git clone --branch aura-link-v6-upload https://github.com/ayushmaurya65236-code/V6.git
+cd V6
+```
 
 1. Create and activate a virtual environment:
 
@@ -39,11 +52,11 @@ Open a terminal in the project folder.
    source .venv/bin/activate
    ```
 
-2. Install the main Python packages:
+2. Install the core Python packages from the dependency file:
 
    ```bash
    python -m pip install --upgrade pip
-   python -m pip install opencv-python mediapipe numpy
+   python -m pip install -r requirements.txt
    ```
 
    Optional audio effects use `sounddevice`:
@@ -51,7 +64,7 @@ Open a terminal in the project folder.
    python -m pip install sounddevice
    ```
 
-   If installation fails, check that your Python version and operating system are supported by MediaPipe. The project currently does not include a pinned `requirements.txt`, so package versions may need adjustment for your system.
+   If installation fails, check that your Python version and operating system are supported by MediaPipe. The dependency file lists the core packages but does not pin exact versions, so installs may change over time.
 
 3. Create your local configuration file from the example:
 
