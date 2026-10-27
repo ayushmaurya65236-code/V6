@@ -295,6 +295,28 @@ void handleLEDOff() {
 }
 
 // ============================================================
+// LED BLINK / STOP
+// ============================================================
+
+void handleLEDBlink() {
+  for (int i = 0; i < 3; i++) {
+    setLED(true);
+    delay(180);
+    setLED(false);
+    delay(180);
+  }
+  server.sendHeader("Location", "/");
+  server.send(302, "text/plain", "LED BLINK COMPLETE");
+}
+
+void handleStop() {
+  // Safe stop for this LED-only firmware: leave the LED OFF.
+  setLED(false);
+  server.sendHeader("Location", "/");
+  server.send(302, "text/plain", "STOPPED");
+}
+
+// ============================================================
 // UNKNOWN ROUTE
 // ============================================================
 
@@ -402,6 +424,8 @@ void setup() {
   server.on("/status", HTTP_GET, handleStatus);
   server.on("/led/on", HTTP_GET, handleLEDOn);
   server.on("/led/off", HTTP_GET, handleLEDOff);
+  server.on("/led/blink", HTTP_GET, handleLEDBlink);
+  server.on("/stop", HTTP_GET, handleStop);
   server.onNotFound(handleNotFound);
   server.begin();
 
